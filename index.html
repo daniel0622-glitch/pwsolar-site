@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>PW Solar - Energia Solar</title>
+
+<style>
+
+body{
+font-family: Arial, sans-serif;
+margin:0;
+background:#f5f5f5;
+}
+
+header{
+background:#0a4d8c;
+color:white;
+text-align:center;
+padding:40px;
+}
+
+.container{
+width:90%;
+max-width:1000px;
+margin:auto;
+padding:30px;
+background:white;
+margin-top:20px;
+border-radius:8px;
+}
+
+h2{
+color:#0a4d8c;
+}
+
+button{
+background:#f4b400;
+border:none;
+padding:15px 25px;
+font-size:16px;
+cursor:pointer;
+border-radius:5px;
+}
+
+input, select{
+width:100%;
+padding:10px;
+margin-top:8px;
+margin-bottom:15px;
+}
+
+.resultado{
+background:#e8f4ff;
+padding:20px;
+margin-top:20px;
+display:none;
+border-radius:6px;
+}
+
+.whatsapp{
+display:inline-block;
+margin-top:15px;
+background:#25d366;
+color:white;
+padding:15px;
+text-decoration:none;
+border-radius:5px;
+}
+
+footer{
+text-align:center;
+padding:20px;
+margin-top:30px;
+background:#0a4d8c;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>PW Solar</h1>
+
+<p>Economize até 95% na sua conta de luz com energia solar</p>
+
+</header>
+
+<div class="container">
+
+<h2>Descubra quanto você pode economizar</h2>
+
+<label>Nome</label>
+<input type="text">
+
+<label>Cidade</label>
+<input type="text">
+
+<label>Valor médio da conta de luz (R$)</label>
+<input type="number" id="conta">
+
+<label>Tipo de imóvel</label>
+<select>
+<option>Casa</option>
+<option>Comércio</option>
+<option>Rural</option>
+</select>
+
+<button onclick="calcular()">Gerar Orçamento</button>
+
+<div class="resultado" id="resultado">
+
+<h2>Resultado estimado</h2>
+
+<p id="placas"></p>
+<p id="potencia"></p>
+<p id="economia"></p>
+
+<a class="whatsapp" href="https://wa.me/5591985684292" target="_blank">
+Receber proposta no WhatsApp
+</a>
+
+</div>
+
+</div>
+
+<div class="container">
+
+<h2>Por que escolher energia solar?</h2>
+
+<ul>
+
+<li>Economia de até 95% na conta de energia</li>
+<li>Valorização do imóvel</li>
+<li>Energia limpa e sustentável</li>
+<li>Painéis com garantia de até 25 anos</li>
+
+</ul>
+
+</div>
+
+<footer>
+
+<p>PW Solar - Energia Solar Fotovoltaica</p>
+<p>WhatsApp: (91) 98568-4292</p>
+
+</footer>
+
+<script>
+
+function calcular(){
+
+let conta = document.getElementById("conta").value;
+
+let placas = Math.ceil(conta / 80);
+
+let potencia = placas * 0.58;
+
+let economia = conta * 0.9;
+
+document.getElementById("placas").innerHTML =
+"Quantidade estimada de placas: " + placas;
+
+document.getElementById("potencia").innerHTML =
+"Potência estimada do sistema: " + potencia.toFixed(2) + " kWp";
+
+document.getElementById("economia").innerHTML =
+"Economia mensal aproximada: R$ " + economia.toFixed(2);
+
+document.getElementById("resultado").style.display = "block";
+
+}
+
+</script>
+
+</body>
+</html>
