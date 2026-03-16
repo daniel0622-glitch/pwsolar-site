@@ -1,78 +1,96 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
 <meta charset="UTF-8">
-<title>PW Solar - Energia Solar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PW Solar - Simulador Solar</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 
 body{
-font-family: Arial, sans-serif;
+font-family: Arial;
 margin:0;
-background:#f5f5f5;
+background:#f4f6f8;
 }
 
 header{
-background:#0a4d8c;
+background:#0b3d6d;
 color:white;
-text-align:center;
-padding:40px;
+padding:20px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+.logo{
+height:60px;
 }
 
 .container{
-width:90%;
 max-width:1000px;
 margin:auto;
 padding:30px;
-background:white;
-margin-top:20px;
-border-radius:8px;
 }
 
-h2{
-color:#0a4d8c;
+.card{
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+margin-bottom:25px;
+}
+
+h1,h2{
+color:#0b3d6d;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:8px;
+margin-bottom:15px;
+border-radius:6px;
+border:1px solid #ccc;
 }
 
 button{
-background:#f4b400;
+background:#f7b500;
 border:none;
-padding:15px 25px;
+padding:15px;
 font-size:16px;
+border-radius:6px;
 cursor:pointer;
-border-radius:5px;
-}
-
-input, select{
 width:100%;
-padding:10px;
-margin-top:8px;
-margin-bottom:15px;
 }
 
 .resultado{
-background:#e8f4ff;
-padding:20px;
-margin-top:20px;
 display:none;
-border-radius:6px;
+margin-top:20px;
 }
 
 .whatsapp{
-display:inline-block;
-margin-top:15px;
+
+display:block;
+text-align:center;
 background:#25d366;
 color:white;
 padding:15px;
 text-decoration:none;
-border-radius:5px;
+border-radius:6px;
+margin-top:20px;
+
 }
 
 footer{
+background:#0b3d6d;
+color:white;
 text-align:center;
 padding:20px;
-margin-top:30px;
-background:#0a4d8c;
-color:white;
+margin-top:40px;
 }
 
 </style>
@@ -83,94 +101,162 @@ color:white;
 
 <header>
 
-<h1>PW Solar</h1>
+<img src="logo.png" class="logo">
 
-<p>Economize até 95% na sua conta de luz com energia solar</p>
+<h2>PW Solar</h2>
 
 </header>
 
 <div class="container">
 
-<h2>Descubra quanto você pode economizar</h2>
+<div class="card">
 
-<label>Nome</label>
-<input type="text">
+<h1>Simule seu Sistema Solar</h1>
 
-<label>Cidade</label>
-<input type="text">
+<p>Descubra quantas placas solares você precisa em menos de 30 segundos.</p>
 
-<label>Valor médio da conta de luz (R$)</label>
-<input type="number" id="conta">
+<label>Consumo mensal (kWh)</label>
+<input type="number" id="consumo">
 
-<label>Tipo de imóvel</label>
-<select>
-<option>Casa</option>
-<option>Comércio</option>
-<option>Rural</option>
+<label>Potência da placa</label>
+<select id="placa">
+
+<option value="0.58">580W</option>
+<option value="0.61">610W</option>
+
 </select>
 
-<button onclick="calcular()">Gerar Orçamento</button>
+<label>Tarifa de energia (R$/kWh)</label>
+<input type="number" id="tarifa" value="1">
+
+<button onclick="calcular()">Simular Sistema</button>
 
 <div class="resultado" id="resultado">
 
-<h2>Resultado estimado</h2>
+<h2>Resultado</h2>
 
-<p id="placas"></p>
 <p id="potencia"></p>
+<p id="placas"></p>
+<p id="geracao"></p>
 <p id="economia"></p>
 
-<a class="whatsapp" href="https://wa.me/5591985684292" target="_blank">
-Receber proposta no WhatsApp
+<canvas id="grafico"></canvas>
+
+<a class="whatsapp" href="https://wa.me/5591985684292">
+Falar com especialista no WhatsApp
 </a>
 
 </div>
 
 </div>
 
-<div class="container">
 
-<h2>Por que escolher energia solar?</h2>
+<div class="card">
+
+<h2>Financiamento estimado</h2>
+
+<p id="financiamento"></p>
+
+</div>
+
+
+<div class="card">
+
+<h2>Por que instalar energia solar?</h2>
 
 <ul>
 
 <li>Economia de até 95% na conta de energia</li>
+<li>Retorno do investimento em poucos anos</li>
 <li>Valorização do imóvel</li>
 <li>Energia limpa e sustentável</li>
-<li>Painéis com garantia de até 25 anos</li>
 
 </ul>
 
 </div>
 
+</div>
+
 <footer>
 
-<p>PW Solar - Energia Solar Fotovoltaica</p>
-<p>WhatsApp: (91) 98568-4292</p>
+PW Solar  
+Energia Solar Fotovoltaica  
+
+WhatsApp: (91) 98568-4292
 
 </footer>
 
 <script>
 
+let chart;
+
 function calcular(){
 
-let conta = document.getElementById("conta").value;
+let consumo = document.getElementById("consumo").value;
 
-let placas = Math.ceil(conta / 80);
+let placa = document.getElementById("placa").value;
 
-let potencia = placas * 0.58;
+let tarifa = document.getElementById("tarifa").value;
 
-let economia = conta * 0.9;
+/* geração média Pará */
 
-document.getElementById("placas").innerHTML =
-"Quantidade estimada de placas: " + placas;
+let geracao_kwp = 135;
+
+let potencia = consumo / geracao_kwp;
+
+let placas = Math.ceil(potencia / placa);
+
+let geracao = potencia * geracao_kwp;
+
+let economia_anual = geracao * tarifa * 12;
+
+/* financiamento aproximado */
+
+let preco_kwp = 4000;
+
+let valor_sistema = potencia * preco_kwp;
+
+let parcela = valor_sistema / 72;
 
 document.getElementById("potencia").innerHTML =
-"Potência estimada do sistema: " + potencia.toFixed(2) + " kWp";
+"Potência do sistema: " + potencia.toFixed(2) + " kWp";
+
+document.getElementById("placas").innerHTML =
+"Quantidade de placas: " + placas;
+
+document.getElementById("geracao").innerHTML =
+"Geração mensal estimada: " + geracao.toFixed(0) + " kWh";
 
 document.getElementById("economia").innerHTML =
-"Economia mensal aproximada: R$ " + economia.toFixed(2);
+"Economia anual estimada: R$ " + economia_anual.toFixed(0);
+
+document.getElementById("financiamento").innerHTML =
+"Sistema estimado: R$ " + valor_sistema.toFixed(0) +
+"<br>Financiamento aproximado: 72x de R$ " + parcela.toFixed(0);
 
 document.getElementById("resultado").style.display = "block";
+
+/* gráfico */
+
+let dados = [geracao*0.9,geracao,geracao*1.05,geracao,geracao*0.95,geracao,geracao*1.1,geracao,geracao,geracao*0.95,geracao*0.9,geracao];
+
+if(chart){
+chart.destroy();
+}
+
+chart = new Chart(document.getElementById("grafico"),{
+
+type:'line',
+
+data:{
+labels:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],
+datasets:[{
+label:"Geração mensal estimada (kWh)",
+data:dados
+}]
+}
+
+});
 
 }
 
