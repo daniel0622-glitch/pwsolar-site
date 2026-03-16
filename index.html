@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PW Solar - Simulador Solar</title>
+<title>PW Solar | Energia Solar Fotovoltaica</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -18,46 +19,74 @@ background:#f4f6f8;
 }
 
 header{
-background:#0b3d6d;
+
+background:#0a3d6b;
 color:white;
-padding:20px;
+padding:15px;
 display:flex;
 align-items:center;
 justify-content:space-between;
+
 }
 
 .logo{
 height:60px;
 }
 
+.hero{
+
+background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("https://images.unsplash.com/photo-1509395176047-4a66953fd231");
+background-size:cover;
+background-position:center;
+color:white;
+text-align:center;
+padding:80px 20px;
+
+}
+
+.hero h1{
+
+font-size:38px;
+
+}
+
 .container{
-max-width:1000px;
+
+max-width:1100px;
 margin:auto;
 padding:30px;
+
 }
 
 .card{
+
 background:white;
 padding:25px;
 border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+box-shadow:0 6px 20px rgba(0,0,0,0.08);
 margin-bottom:25px;
+
 }
 
-h1,h2{
-color:#0b3d6d;
+h2{
+
+color:#0a3d6b;
+
 }
 
 input,select{
+
 width:100%;
 padding:12px;
 margin-top:8px;
 margin-bottom:15px;
 border-radius:6px;
 border:1px solid #ccc;
+
 }
 
 button{
+
 background:#f7b500;
 border:none;
 padding:15px;
@@ -65,32 +94,59 @@ font-size:16px;
 border-radius:6px;
 cursor:pointer;
 width:100%;
+
 }
 
 .resultado{
+
 display:none;
 margin-top:20px;
+
 }
 
 .whatsapp{
 
 display:block;
-text-align:center;
 background:#25d366;
 color:white;
+text-align:center;
 padding:15px;
-text-decoration:none;
 border-radius:6px;
+text-decoration:none;
 margin-top:20px;
 
 }
 
+.mapa{
+
+width:100%;
+height:350px;
+border:none;
+border-radius:10px;
+
+}
+
 footer{
-background:#0b3d6d;
+
+background:#0a3d6b;
 color:white;
 text-align:center;
-padding:20px;
-margin-top:40px;
+padding:25px;
+
+}
+
+.whatsappFloat{
+
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25d366;
+color:white;
+padding:15px 20px;
+border-radius:50px;
+text-decoration:none;
+font-weight:bold;
+
 }
 
 </style>
@@ -107,18 +163,32 @@ margin-top:40px;
 
 </header>
 
+<section class="hero">
+
+<h1>Economize até 95% na conta de energia</h1>
+
+<p>Descubra quantas placas solares sua casa precisa em menos de 30 segundos</p>
+
+</section>
+
+
 <div class="container">
 
 <div class="card">
 
-<h1>Simule seu Sistema Solar</h1>
+<h2>Simulador Solar</h2>
 
-<p>Descubra quantas placas solares você precisa em menos de 30 segundos.</p>
+<label>Nome</label>
+<input id="nome">
+
+<label>WhatsApp</label>
+<input id="telefone">
 
 <label>Consumo mensal (kWh)</label>
 <input type="number" id="consumo">
 
 <label>Potência da placa</label>
+
 <select id="placa">
 
 <option value="0.58">580W</option>
@@ -127,13 +197,13 @@ margin-top:40px;
 </select>
 
 <label>Tarifa de energia (R$/kWh)</label>
-<input type="number" id="tarifa" value="1">
+<input id="tarifa" value="1">
 
-<button onclick="calcular()">Simular Sistema</button>
+<button onclick="calcular()">Simular Economia</button>
 
 <div class="resultado" id="resultado">
 
-<h2>Resultado</h2>
+<h2>Resultado da Simulação</h2>
 
 <p id="potencia"></p>
 <p id="placas"></p>
@@ -142,11 +212,24 @@ margin-top:40px;
 
 <canvas id="grafico"></canvas>
 
-<a class="whatsapp" href="https://wa.me/5591985684292">
-Falar com especialista no WhatsApp
+<a id="linkWhatsapp" class="whatsapp" target="_blank">
+Receber proposta no WhatsApp
 </a>
 
 </div>
+
+</div>
+
+
+<div class="card">
+
+<h2>Visualize seu telhado</h2>
+
+<input id="endereco" placeholder="Digite seu endereço">
+
+<button onclick="buscarMapa()">Ver no mapa</button>
+
+<iframe id="mapa" class="mapa"></iframe>
 
 </div>
 
@@ -162,14 +245,14 @@ Falar com especialista no WhatsApp
 
 <div class="card">
 
-<h2>Por que instalar energia solar?</h2>
+<h2>Vantagens da Energia Solar</h2>
 
 <ul>
 
 <li>Economia de até 95% na conta de energia</li>
-<li>Retorno do investimento em poucos anos</li>
 <li>Valorização do imóvel</li>
 <li>Energia limpa e sustentável</li>
+<li>Garantia de até 25 anos nos painéis</li>
 
 </ul>
 
@@ -186,11 +269,19 @@ WhatsApp: (91) 98568-4292
 
 </footer>
 
+<a class="whatsappFloat" href="https://wa.me/5591985684292">
+
+WhatsApp
+
+</a>
+
 <script>
 
 let chart;
 
 function calcular(){
+
+let nome = document.getElementById("nome").value;
 
 let consumo = document.getElementById("consumo").value;
 
@@ -198,7 +289,7 @@ let placa = document.getElementById("placa").value;
 
 let tarifa = document.getElementById("tarifa").value;
 
-/* geração média Pará */
+/* média Pará */
 
 let geracao_kwp = 135;
 
@@ -210,16 +301,16 @@ let geracao = potencia * geracao_kwp;
 
 let economia_anual = geracao * tarifa * 12;
 
-/* financiamento aproximado */
+/* preço médio sistema */
 
 let preco_kwp = 4000;
 
-let valor_sistema = potencia * preco_kwp;
+let valor = potencia * preco_kwp;
 
-let parcela = valor_sistema / 72;
+let parcela = valor / 72;
 
 document.getElementById("potencia").innerHTML =
-"Potência do sistema: " + potencia.toFixed(2) + " kWp";
+"Potência estimada: " + potencia.toFixed(2) + " kWp";
 
 document.getElementById("placas").innerHTML =
 "Quantidade de placas: " + placas;
@@ -231,14 +322,28 @@ document.getElementById("economia").innerHTML =
 "Economia anual estimada: R$ " + economia_anual.toFixed(0);
 
 document.getElementById("financiamento").innerHTML =
-"Sistema estimado: R$ " + valor_sistema.toFixed(0) +
-"<br>Financiamento aproximado: 72x de R$ " + parcela.toFixed(0);
+"Sistema estimado: R$ " + valor.toFixed(0) +
+"<br>Financiamento estimado: 72x de R$ " + parcela.toFixed(0);
 
-document.getElementById("resultado").style.display = "block";
+let mensagem =
+"Olá, fiz uma simulação no site da PW Solar.%0A" +
+"Consumo: " + consumo + " kWh%0A" +
+"Placas: " + placas;
+
+let link =
+"https://wa.me/5591985684292?text=" + mensagem;
+
+document.getElementById("linkWhatsapp").href = link;
+
+document.getElementById("resultado").style.display="block";
 
 /* gráfico */
 
-let dados = [geracao*0.9,geracao,geracao*1.05,geracao,geracao*0.95,geracao,geracao*1.1,geracao,geracao,geracao*0.95,geracao*0.9,geracao];
+let dados = [
+geracao*0.9,geracao,geracao*1.05,geracao,
+geracao*0.95,geracao,geracao*1.1,geracao,
+geracao,geracao*0.95,geracao*0.9,geracao
+];
 
 if(chart){
 chart.destroy();
@@ -251,7 +356,7 @@ type:'line',
 data:{
 labels:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],
 datasets:[{
-label:"Geração mensal estimada (kWh)",
+label:"Geração estimada (kWh)",
 data:dados
 }]
 }
@@ -260,7 +365,19 @@ data:dados
 
 }
 
+function buscarMapa(){
+
+let endereco = document.getElementById("endereco").value;
+
+let url =
+"https://maps.google.com/maps?q="+endereco+"&t=k&z=20&output=embed";
+
+document.getElementById("mapa").src=url;
+
+}
+
 </script>
 
 </body>
+
 </html>
